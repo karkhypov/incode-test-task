@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-
-import socket from './socket';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Container } from '@mui/system';
 import { Grid } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 
-import './App.css';
+import { selectStocksData, selectStocksIsLoading } from './store/stocks/stocks.selector';
+import { fetchStocks, fetchStocksUpdate } from './store/stocks/stocks.action';
 
-import BasicTable from './components/basic-table.component';
+import StockTable from './components/stock-table.component';
+
+import './App.css';
 
 const darkTheme = createTheme({
   palette: {
@@ -18,22 +20,17 @@ const darkTheme = createTheme({
 });
 
 const App = () => {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const data = useSelector(selectStocksData);
+  const isLoading = useSelector(selectStocksIsLoading);
 
   useEffect(() => {
-    socket.emit('start');
-  }, []);
-
-  const handleTicker = (response) => {
-    setData(response);
-  };
+    dispatch(fetchStocks());
+  }, [dispatch]);
 
   useEffect(() => {
-    socket.on('ticker', (response) => handleTicker(response));
-    return () => {
-      socket.off('ticker');
-    };
-  }, [data]);
+    dispatch(fetchStocksUpdate());
+  }, [dispatch]);
 
   return (
     <>
@@ -47,7 +44,11 @@ const App = () => {
             justifyContent='center'
             sx={{ minHeight: '100vh' }}
           >
-            {data.length === 0 ? <CircularProgress /> : <BasicTable data={data} />}
+            {isLoading || data.length === 0 ? (
+              <CircularProgress />
+            ) : (
+              <StockTable data={data} />
+            )}
           </Grid>
         </Container>
       </ThemeProvider>
