@@ -11,3 +11,8 @@ export const selectStocksIsLoading = createSelector(
   [selectStocksReducer],
   (stocksSlice) => stocksSlice.isLoading
 );
+
+export const selectStocksIsPaused = createSelector(
+  [selectStocksReducer],
+  (stocksSlice) => stocksSlice.isPaused
+);

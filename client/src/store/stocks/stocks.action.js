@@ -19,6 +19,17 @@ export const fetchStocksSuccess = (stocksArray) =>
 export const fetchStocksUpdateSuccess = (stocksArray) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_UPDATE_SUCCESS, stocksArray);
 
+export const fetchStocksPause = () => {
+  socket.disconnect();
+  return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_PAUSE);
+};
+
+export const fetchStocksResume = () => {
+  socket.connect();
+  socket.emit('start');
+  return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_RESUME);
+};
+
 export const fetchStocksFailure = (error) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_FAILED, error);
 

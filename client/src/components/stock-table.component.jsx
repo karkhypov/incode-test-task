@@ -35,7 +35,7 @@ const createData = (
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -47,7 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
+
   '&:last-child td, &:last-child th': {
     border: 0,
   },
@@ -91,7 +91,7 @@ const StockTable = ({ data }) => {
                 {row.last_trade_time.slice(11, 19)}
               </StyledTableCell>
               <StyledTableCell align='right' sx={{ padding: '11px' }}>
-                <Switch defaultChecked color='secondary' />
+                <Switch defaultChecked />
               </StyledTableCell>
             </StyledTableRow>
           ))}
