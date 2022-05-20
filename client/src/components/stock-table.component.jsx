@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import {
   Table,
   TableBody,
@@ -10,6 +12,8 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
+
+import { selectStocksData } from '../store/stocks/stocks.selector';
 
 const createData = (
   ticker,
@@ -53,8 +57,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const growVisualization = (value) => {
+  switch (value) {
+    case 'up':
+      return { color: 'green' };
+    case 'down':
+      return { color: 'red' };
+    case 'same':
+      return {};
+    default:
+      return;
+  }
+};
+
 const StockTable = ({ data }) => {
   const rows = data.map((element) => createData(...Object.values(element)));
+  const stocksData = useSelector(selectStocksData);
 
   return (
     <TableContainer component={Paper}>
@@ -73,28 +91,38 @@ const StockTable = ({ data }) => {
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow
-              key={row.ticker}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <StyledTableCell component='th' scope='row'>
-                {row.ticker}
-              </StyledTableCell>
-              <StyledTableCell align='right'>{row.exchange}</StyledTableCell>
-              <StyledTableCell align='right'>{row.price}</StyledTableCell>
-              <StyledTableCell align='right'>{row.change}</StyledTableCell>
-              <StyledTableCell align='right'>{row.change_percent}</StyledTableCell>
-              <StyledTableCell align='right'>{row.dividend}</StyledTableCell>
-              <StyledTableCell align='right'>{row.income}</StyledTableCell>
-              <StyledTableCell align='right'>
-                {row.last_trade_time.slice(11, 19)}
-              </StyledTableCell>
-              <StyledTableCell align='right' sx={{ padding: '11px' }}>
-                <Switch defaultChecked />
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {rows.map((row, index) => {
+            const isGrowing = stocksData[index].is_growing;
+            const isGrowingResult = () =>
+              isGrowing === 1 ? 'up' : isGrowing === -1 ? 'down' : 'same';
+
+            return (
+              <StyledTableRow
+                key={row.ticker}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <StyledTableCell component='th' scope='row'>
+                  {row.ticker}
+                </StyledTableCell>
+                <StyledTableCell align='right'></StyledTableCell>
+                <StyledTableCell align='right'>{row.price}</StyledTableCell>
+                <StyledTableCell sx={growVisualization(isGrowingResult())} align='right'>
+                  {row.change}
+                </StyledTableCell>
+                <StyledTableCell sx={growVisualization(isGrowingResult())} align='right'>
+                  {row.change_percent}
+                </StyledTableCell>
+                <StyledTableCell align='right'>{row.dividend}</StyledTableCell>
+                <StyledTableCell align='right'>{row.income}</StyledTableCell>
+                <StyledTableCell align='right'>
+                  {row.last_trade_time.slice(11, 19)}
+                </StyledTableCell>
+                <StyledTableCell align='right' sx={{ padding: '11px' }}>
+                  <Switch defaultChecked />
+                </StyledTableCell>
+              </StyledTableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

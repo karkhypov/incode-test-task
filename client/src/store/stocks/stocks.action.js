@@ -3,6 +3,22 @@ import { createAction } from '../../utils/reducer/reducer.utils';
 
 import socket from '../../connection/socket';
 
+import { store } from '../store';
+
+const setIsGrowing = (stocks) => {
+  const prevStocksData = store.getState().stocks.data;
+
+  stocks.forEach((stock, index) => {
+    if (+stock.price > +prevStocksData[index].price) {
+      stock.is_growing = 1;
+    } else if (+stock.price < +prevStocksData[index].price) {
+      stock.is_growing = -1;
+    } else {
+      stock.is_growing = 0;
+    }
+  });
+};
+
 const fetchStocksStart = () => (dispatch) => {
   try {
     socket.emit('start');
@@ -35,7 +51,10 @@ export const fetchStocks = () => (dispatch) => {
 
 export const fetchStocksUpdate = () => (dispatch) => {
   try {
-    socket.on('ticker', (response) => dispatch(fetchStocksUpdateSuccess(response)));
+    socket.on('ticker', (response) => {
+      setIsGrowing(response);
+      dispatch(fetchStocksUpdateSuccess(response));
+    });
   } catch (error) {
     socket.disconnect();
     dispatch(fetchStocksFailure(error));

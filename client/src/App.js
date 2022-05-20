@@ -45,7 +45,8 @@ const App = () => {
   };
 
   const handleInterval = () => {
-    socket.emit('set interval', value < 1 ? 1000 : value * 1000);
+    const interval = (value < 1 ? 1 : Math.round(value)) * 1000;
+    socket.emit('set interval', interval);
     setValue('');
   };
 
@@ -75,7 +76,7 @@ const App = () => {
         )}
         <FormControl sx={{ display: 'flex' }}>
           <TextField
-            label='Interval'
+            label='Interval (sec)'
             type='number'
             value={value}
             onChange={(e) => setValue(e.target.value)}
