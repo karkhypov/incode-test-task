@@ -5,16 +5,19 @@ import socket from '../../connection/socket';
 
 import { store } from '../store';
 
-const setIsGrowing = (stocks) => {
+const checkIfGrowing = (stocks) => {
   const prevStocksData = store.getState().stocks.data;
 
   stocks.forEach((stock, index) => {
-    if (+stock.price > +prevStocksData[index].price) {
-      stock.is_growing = 1;
-    } else if (+stock.price < +prevStocksData[index].price) {
-      stock.is_growing = -1;
+    const prevPrice = +prevStocksData[index].price;
+    const curPrice = +stock.price;
+
+    if (curPrice > prevPrice) {
+      stock.is_growing = 'up';
+    } else if (curPrice < prevPrice) {
+      stock.is_growing = 'down';
     } else {
-      stock.is_growing = 0;
+      stock.is_growing = 'same';
     }
   });
 };
@@ -52,7 +55,7 @@ export const fetchStocks = () => (dispatch) => {
 export const fetchStocksUpdate = () => (dispatch) => {
   try {
     socket.on('ticker', (response) => {
-      setIsGrowing(response);
+      checkIfGrowing(response);
       dispatch(fetchStocksUpdateSuccess(response));
     });
   } catch (error) {

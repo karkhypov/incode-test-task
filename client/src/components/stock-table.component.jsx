@@ -83,7 +83,7 @@ const StockTable = ({ data }) => {
             <StyledTableCell align='right'>Exchange</StyledTableCell>
             <StyledTableCell align='right'>Price</StyledTableCell>
             <StyledTableCell align='right'>Change</StyledTableCell>
-            <StyledTableCell align='right'>Change %</StyledTableCell>
+            <StyledTableCell align='right'>Change Percent</StyledTableCell>
             <StyledTableCell align='right'>Dividend</StyledTableCell>
             <StyledTableCell align='right'>Yield</StyledTableCell>
             <StyledTableCell align='right'>Last Trade Time</StyledTableCell>
@@ -93,8 +93,6 @@ const StockTable = ({ data }) => {
         <TableBody>
           {rows.map((row, index) => {
             const isGrowing = stocksData[index].is_growing;
-            const isGrowingResult = () =>
-              isGrowing === 1 ? 'up' : isGrowing === -1 ? 'down' : 'same';
 
             return (
               <StyledTableRow
@@ -104,13 +102,13 @@ const StockTable = ({ data }) => {
                 <StyledTableCell component='th' scope='row'>
                   {row.ticker}
                 </StyledTableCell>
-                <StyledTableCell align='right'></StyledTableCell>
+                <StyledTableCell align='right'>{row.exchange}</StyledTableCell>
                 <StyledTableCell align='right'>{row.price}</StyledTableCell>
-                <StyledTableCell sx={growVisualization(isGrowingResult())} align='right'>
+                <StyledTableCell sx={growVisualization(isGrowing)} align='right'>
                   {row.change}
                 </StyledTableCell>
-                <StyledTableCell sx={growVisualization(isGrowingResult())} align='right'>
-                  {row.change_percent}
+                <StyledTableCell sx={growVisualization(isGrowing)} align='right'>
+                  {row.change_percent} &#x25;
                 </StyledTableCell>
                 <StyledTableCell align='right'>{row.dividend}</StyledTableCell>
                 <StyledTableCell align='right'>{row.income}</StyledTableCell>
