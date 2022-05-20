@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Container } from '@mui/system';
-import { Grid, CircularProgress, Button } from '@mui/material';
+import { Grid, CircularProgress, Button, FormControl, TextField } from '@mui/material';
 
 import {
   selectStocksData,
@@ -16,11 +16,15 @@ import {
   fetchStocksResume,
 } from './store/stocks/stocks.action';
 
+import socket from './connection/socket';
+
 import StockTable from './components/stock-table.component';
 
 import './App.css';
 
 const App = () => {
+  const [value, setValue] = useState('');
+
   const dispatch = useDispatch();
 
   const data = useSelector(selectStocksData);
@@ -38,6 +42,11 @@ const App = () => {
 
   const handleResume = () => {
     dispatch(fetchStocksResume());
+  };
+
+  const handleInterval = () => {
+    socket.emit('set interval', value < 1 ? 1000 : value * 1000);
+    setValue('');
   };
 
   return (
@@ -64,6 +73,17 @@ const App = () => {
             Pause
           </Button>
         )}
+        <FormControl sx={{ display: 'flex' }}>
+          <TextField
+            label='Interval'
+            type='number'
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <Button variant='contained' onClick={handleInterval}>
+            Submit
+          </Button>
+        </FormControl>
       </Grid>
     </Container>
   );
