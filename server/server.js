@@ -33,7 +33,7 @@ function utcDate() {
   );
 }
 
-function getQuotes(socket) {
+function getQuotes(socket, interval = FETCH_INTERVAL) {
   const quotes = tickers.map((ticker) => ({
     ticker,
     exchange: 'NASDAQ',
@@ -45,7 +45,7 @@ function getQuotes(socket) {
     last_trade_time: utcDate(),
   }));
 
-  socket.emit('ticker', quotes);
+  socket.emit('ticker', quotes, interval);
 }
 
 function trackTickers(socket, interval = FETCH_INTERVAL) {
@@ -54,7 +54,7 @@ function trackTickers(socket, interval = FETCH_INTERVAL) {
 
   // every N seconds
   const timer = setInterval(() => {
-    getQuotes(socket);
+    getQuotes(socket, interval);
   }, interval);
 
   socket.on('start', () => clearInterval(timer));

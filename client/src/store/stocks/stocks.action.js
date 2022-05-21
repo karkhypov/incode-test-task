@@ -5,6 +5,10 @@ import socket from '../../connection/socket';
 
 import { store } from '../store';
 
+const stocksAndInterval = (data, interval) => {
+  return { data, interval: interval / 1000 };
+};
+
 const checkIfGrowing = (stocks) => {
   const prevStocksData = store.getState().stocks.data;
 
@@ -26,8 +30,8 @@ const fetchStocksStart = () => (dispatch) => {
   }
 };
 
-const fetchStocksSuccess = (stocksArray) =>
-  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_SUCCESS, stocksArray);
+const fetchStocksSuccess = (data) =>
+  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_SUCCESS, data);
 
 const fetchStocksUpdateSuccess = (stocksArray) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_UPDATE_SUCCESS, stocksArray);
@@ -39,7 +43,9 @@ export const fetchStocks = () => (dispatch) => {
   dispatch(fetchStocksStart());
 
   try {
-    socket.once('ticker', (response) => dispatch(fetchStocksSuccess(response)));
+    socket.once('ticker', (data, interval) =>
+      dispatch(fetchStocksSuccess(stocksAndInterval(data, interval)))
+    );
   } catch (error) {
     socket.disconnect();
     dispatch(fetchStocksFailure(error));
@@ -48,9 +54,9 @@ export const fetchStocks = () => (dispatch) => {
 
 export const fetchStocksUpdate = () => (dispatch) => {
   try {
-    socket.on('ticker', (response) => {
-      checkIfGrowing(response);
-      dispatch(fetchStocksUpdateSuccess(response));
+    socket.on('ticker', (data, interval) => {
+      checkIfGrowing(data);
+      dispatch(fetchStocksUpdateSuccess(stocksAndInterval(data, interval)));
     });
   } catch (error) {
     socket.disconnect();
@@ -73,4 +79,5 @@ export const setTickersInterval = (inputValue) => {
   const interval =
     (inputValue < 1 ? 1 : inputValue > 60 ? 60 : Math.round(inputValue)) * 1000;
   socket.emit('start', interval);
+  return createAction(STOCKS_ACTION_TYPES.SET_TICKERS_INTERVAL, interval / 1000);
 };
