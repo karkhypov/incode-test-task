@@ -12,13 +12,7 @@ const checkIfGrowing = (stocks) => {
     const prevPrice = +prevStocksData[index].price;
     const curPrice = +stock.price;
 
-    if (curPrice > prevPrice) {
-      stock.is_growing = 'up';
-    } else if (curPrice < prevPrice) {
-      stock.is_growing = 'down';
-    } else {
-      stock.is_growing = 'same';
-    }
+    curPrice > prevPrice ? (stock.is_growing = true) : (stock.is_growing = false);
   });
 };
 
@@ -32,13 +26,13 @@ const fetchStocksStart = () => (dispatch) => {
   }
 };
 
-export const fetchStocksSuccess = (stocksArray) =>
+const fetchStocksSuccess = (stocksArray) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_SUCCESS, stocksArray);
 
-export const fetchStocksUpdateSuccess = (stocksArray) =>
+const fetchStocksUpdateSuccess = (stocksArray) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_UPDATE_SUCCESS, stocksArray);
 
-export const fetchStocksFailure = (error) =>
+const fetchStocksFailure = (error) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_FAILED, error);
 
 export const fetchStocks = () => (dispatch) => {
@@ -73,4 +67,10 @@ export const fetchStocksResume = () => {
   socket.connect();
   socket.emit('start');
   return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_RESUME);
+};
+
+export const setTickersInterval = (inputValue) => {
+  const interval =
+    (inputValue < 1 ? 1 : inputValue > 60 ? 60 : Math.round(inputValue)) * 1000;
+  socket.emit('start', interval);
 };

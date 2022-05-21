@@ -57,16 +57,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const growVisualization = (value) => {
-  switch (value) {
-    case 'up':
+const growVisualization = (bool) => {
+  switch (bool) {
+    case true:
       return { color: 'green' };
-    case 'down':
+    case false:
       return { color: 'red' };
-    case 'same':
-      return {};
     default:
-      return;
+      return {};
   }
 };
 

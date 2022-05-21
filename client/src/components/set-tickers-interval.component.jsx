@@ -1,18 +1,20 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { setTickersInterval } from '../store/stocks/stocks.action';
 
 import { Button, TextField } from '@mui/material';
 
-import socket from '../connection/socket';
-
 const SetTickersInterval = () => {
-  const [value, setValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
-  const handleChange = (e) => setValue(e.target.value);
+  const dispatch = useDispatch();
 
-  const handleInterval = () => {
-    const interval = (value < 1 ? 1 : Math.round(value)) * 1000;
-    socket.emit('set interval', interval);
-    setValue('');
+  const handleChange = (e) => setInputValue(e.target.value);
+
+  const handleSubmit = () => {
+    dispatch(setTickersInterval(inputValue));
+    setInputValue('');
   };
 
   return (
@@ -20,11 +22,11 @@ const SetTickersInterval = () => {
       sx={{ width: '210px' }}
       label='Interval (sec)'
       type='number'
-      value={value}
+      value={inputValue}
       onChange={handleChange}
       InputProps={{
         endAdornment: (
-          <Button variant='contained' onClick={handleInterval}>
+          <Button variant='contained' onClick={handleSubmit}>
             Submit
           </Button>
         ),
