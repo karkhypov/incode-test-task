@@ -16,3 +16,8 @@ export const selectStocksIsPaused = createSelector(
   [selectStocksReducer],
   (stocksSlice) => stocksSlice.isPaused
 );
+
+export const selectTickersInterval = createSelector(
+  [selectStocksReducer],
+  (stocksSlice) => stocksSlice.interval
+);

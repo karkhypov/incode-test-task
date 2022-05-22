@@ -33,31 +33,48 @@ function utcDate() {
   );
 }
 
-function getQuotes(socket, interval = FETCH_INTERVAL) {
-  const quotes = tickers.map((ticker) => ({
+let filteredTickers = [];
+
+function getInitialQuotes(socket, interval = FETCH_INTERVAL) {
+  const initialQuotes = tickers.map((ticker) => ({
     ticker,
     exchange: 'NASDAQ',
     price: randomValue(100, 300, 2),
-    change: randomValue(0, 200, 2),
-    change_percent: randomValue(0, 1, 2),
+    change: 'n/a',
+    change_percent: 'n/a',
     dividend: randomValue(0, 1, 2),
     yield: randomValue(0, 2, 2),
     last_trade_time: utcDate(),
   }));
 
+  socket.emit('initial', initialQuotes, interval);
+}
+
+function getQuotes(socket, interval = FETCH_INTERVAL) {
+  const quotes = tickers
+    .filter((e) => filteredTickers.indexOf(e) === -1)
+    .map((ticker) => ({
+      ticker,
+      exchange: 'NASDAQ',
+      price: randomValue(100, 300, 2),
+      change: randomValue(0, 200, 2),
+      change_percent: randomValue(0, 1, 2),
+      dividend: randomValue(0, 1, 2),
+      yield: randomValue(0, 2, 2),
+      last_trade_time: utcDate(),
+    }));
+
   socket.emit('ticker', quotes, interval);
 }
 
 function trackTickers(socket, interval = FETCH_INTERVAL) {
-  // run the first time immediately
-  getQuotes(socket);
-
   // every N seconds
   const timer = setInterval(() => {
     getQuotes(socket, interval);
   }, interval);
 
   socket.on('start', () => clearInterval(timer));
+  socket.on('pause', () => clearInterval(timer));
   socket.on('disconnect', () => clearInterval(timer));
 }
 
@@ -75,14 +92,34 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+let interval;
+
 socketServer.on('connection', (socket) => {
-  let interval;
+  getInitialQuotes(socket);
 
   socket.on('start', (response) => {
     if (response) {
       interval = response;
     }
     trackTickers(socket, interval);
+  });
+
+  socket.on('watch-unwatch', (response) => {
+    const { ticker, bool } = response;
+
+    if (bool) {
+      filteredTickers.push(ticker);
+      socket.emit('start', interval);
+      return;
+    }
+
+    filteredTickers = filteredTickers.filter((e) => e !== ticker);
+    socket.emit('start', interval);
+  });
+
+  socket.on('reset', () => {
+    interval = FETCH_INTERVAL;
+    filteredTickers = [];
   });
 });
 

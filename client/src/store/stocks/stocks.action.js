@@ -40,12 +40,12 @@ const fetchStocksFailure = (error) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_FAILED, error);
 
 export const fetchStocks = () => (dispatch) => {
-  dispatch(fetchStocksStart());
-
   try {
-    socket.once('ticker', (data, interval) =>
-      dispatch(fetchStocksSuccess(stocksAndInterval(data, interval)))
-    );
+    socket.emit('reset');
+    socket.once('initial', (data, interval) => {
+      dispatch(fetchStocksSuccess(stocksAndInterval(data, interval)));
+    });
+    dispatch(fetchStocksStart());
   } catch (error) {
     socket.disconnect();
     dispatch(fetchStocksFailure(error));
@@ -80,4 +80,9 @@ export const setTickersInterval = (inputValue) => {
     (inputValue < 1 ? 1 : inputValue > 60 ? 60 : Math.round(inputValue)) * 1000;
   socket.emit('start', interval);
   return createAction(STOCKS_ACTION_TYPES.SET_TICKERS_INTERVAL, interval / 1000);
+};
+
+export const watchUnwatchTicker = (ticker) => {
+  socket.emit('watch-unwatch', ticker);
+  return createAction(STOCKS_ACTION_TYPES.WATCH_UNWATCH_TICKER);
 };

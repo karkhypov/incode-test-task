@@ -1,23 +1,20 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { Container } from '@mui/system';
-import { Grid, CircularProgress } from '@mui/material';
+import { Grid } from '@mui/material';
 
-import { selectStocksData, selectStocksIsLoading } from './store/stocks/stocks.selector';
 import { fetchStocks, fetchStocksUpdate } from './store/stocks/stocks.action';
 
-import StockTable from './components/stock-table.component';
+import StockTable from './components/stock-table/stock-table.component';
 import PauseResumeButton from './components/pause-resume-button.component';
 import SetTickersInterval from './components/set-tickers-interval.component';
+import IntervalTooltip from './components/interval-tooltip.component';
 
 import './App.css';
 
 const App = () => {
   const dispatch = useDispatch();
-
-  const data = useSelector(selectStocksData);
-  const isLoading = useSelector(selectStocksIsLoading);
 
   useEffect(() => {
     dispatch(fetchStocks());
@@ -34,12 +31,8 @@ const App = () => {
         justifyContent='center'
         sx={{ minHeight: '100vh' }}
       >
-        {isLoading || data.length === 0 ? (
-          <CircularProgress />
-        ) : (
-          <StockTable data={data} />
-        )}
-
+        <StockTable />
+        <IntervalTooltip />
         <PauseResumeButton />
         <SetTickersInterval />
       </Grid>
