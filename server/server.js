@@ -67,17 +67,13 @@ function getQuotes(socket, interval = FETCH_INTERVAL) {
   socket.emit('ticker', quotes, interval);
 }
 
+let timer;
+
 function trackTickers(socket, interval = FETCH_INTERVAL) {
   // every N seconds
-  const timer = setInterval(() => {
+  timer = setInterval(() => {
     getQuotes(socket, interval);
   }, interval);
-
-  socket.on('start', () => clearInterval(timer));
-  socket.on('disconnect', () => {
-    socket.removeAllListeners('connection');
-    clearInterval(timer);
-  });
 }
 
 const app = express();
@@ -100,9 +96,12 @@ socketServer.on('connection', (socket) => {
   getInitialQuotes(socket);
 
   socket.on('start', (response) => {
+    clearInterval(timer);
+
     if (response) {
       interval = response;
     }
+
     trackTickers(socket, interval);
   });
 
@@ -122,6 +121,11 @@ socketServer.on('connection', (socket) => {
   socket.on('reset', () => {
     interval = FETCH_INTERVAL;
     filteredTickers = [];
+  });
+
+  socket.on('disconnect', () => {
+    socket.removeAllListeners('connection');
+    clearInterval(timer);
   });
 });
 
