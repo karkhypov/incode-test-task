@@ -1,43 +1,25 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Container } from '@mui/system';
-import { Grid } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+
+import MainPage from './pages/main-page.component';
 
 import { fetchStocks, fetchStocksUpdate } from './store/stocks/stocks.action';
-
-import StockTable from './components/stock-table/stock-table.component';
-import PauseResumeButton from './components/pause-resume-button.component';
-import SetTickersInterval from './components/set-tickers-interval.component';
-import IntervalTooltip from './components/interval-tooltip.component';
+import { selectStocksIsLoading } from './store/stocks/stocks.selector';
 
 import './App.css';
 
 const App = () => {
   const dispatch = useDispatch();
+  const isLoading = useSelector(selectStocksIsLoading);
 
   useEffect(() => {
     dispatch(fetchStocks());
     dispatch(fetchStocksUpdate());
   }, [dispatch]);
 
-  return (
-    <Container>
-      <Grid
-        container
-        spacing={0}
-        direction='column'
-        alignItems='center'
-        justifyContent='center'
-        sx={{ minHeight: '100vh' }}
-      >
-        <StockTable />
-        <IntervalTooltip />
-        <PauseResumeButton />
-        <SetTickersInterval />
-      </Grid>
-    </Container>
-  );
+  return isLoading || isLoading === 'initial' ? <CircularProgress /> : <MainPage />;
 };
 
 export default App;

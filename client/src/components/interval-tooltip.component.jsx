@@ -8,7 +8,7 @@ const IntervalTooltip = () => {
   const interval = useSelector(selectTickersInterval);
 
   return (
-    <Typography variant='subtitle1'>
+    <Typography variant='subtitle1' sx={{ mb: 1, fontSize: 18 }}>
       Tickers Interval: {interval} second{interval > 1 && 's'}
     </Typography>
   );

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { TableBody } from '@mui/material';
 import ControlledSwitch from '../controlled-switch.component';
+import CustomChip, { CUSTOM_CHIP_TYPE_CLASSES } from '../custom-chip.component';
 
 import { StyledTableCell, StyledTableRow } from './custom-table.styles';
 
@@ -30,17 +31,6 @@ const createData = (
   };
 };
 
-const growVisualization = (bool) => {
-  switch (bool) {
-    case true:
-      return { color: 'green' };
-    case false:
-      return { color: 'red' };
-    default:
-      return {};
-  }
-};
-
 const CustomTableBody = () => {
   const stocksData = useSelector(selectStocksData);
   const rows = stocksData.map((element) => createData(...Object.values(element)));
@@ -61,11 +51,29 @@ const CustomTableBody = () => {
             </StyledTableCell>
             <StyledTableCell align='right'>{row.exchange}</StyledTableCell>
             <StyledTableCell align='right'>{row.price}</StyledTableCell>
-            <StyledTableCell sx={growVisualization(isGrowing)} align='right'>
-              {row.change}
+            <StyledTableCell align='right'>
+              <CustomChip
+                type={
+                  isGrowing === undefined
+                    ? CUSTOM_CHIP_TYPE_CLASSES.initial
+                    : isGrowing
+                    ? CUSTOM_CHIP_TYPE_CLASSES.changeUp
+                    : CUSTOM_CHIP_TYPE_CLASSES.changeDown
+                }
+                value={row.change}
+              />
             </StyledTableCell>
-            <StyledTableCell sx={growVisualization(isGrowing)} align='right'>
-              {row.change_percent} &#x25;
+            <StyledTableCell align='right'>
+              <CustomChip
+                type={
+                  isGrowing === undefined
+                    ? CUSTOM_CHIP_TYPE_CLASSES.initial
+                    : isGrowing
+                    ? CUSTOM_CHIP_TYPE_CLASSES.changePercentUp
+                    : CUSTOM_CHIP_TYPE_CLASSES.changePercentDown
+                }
+                value={row.change_percent}
+              />
             </StyledTableCell>
             <StyledTableCell align='right'>{row.dividend}</StyledTableCell>
             <StyledTableCell align='right'>{row.income}</StyledTableCell>

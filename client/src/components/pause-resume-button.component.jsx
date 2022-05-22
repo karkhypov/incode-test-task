@@ -18,12 +18,17 @@ const PauseResumeButton = () => {
     dispatch(fetchStocksResume());
   };
 
+  const buttonStyles = {
+    height: '45px',
+    width: '95px',
+  };
+
   return isPaused ? (
-    <Button variant='contained' onClick={handleResume}>
+    <Button sx={buttonStyles} variant='contained' onClick={handleResume}>
       Resume
     </Button>
   ) : (
-    <Button variant='contained' color='error' onClick={handlePause}>
+    <Button sx={buttonStyles} variant='contained' color='error' onClick={handlePause}>
       Pause
     </Button>
   );

@@ -74,8 +74,10 @@ function trackTickers(socket, interval = FETCH_INTERVAL) {
   }, interval);
 
   socket.on('start', () => clearInterval(timer));
-  socket.on('pause', () => clearInterval(timer));
-  socket.on('disconnect', () => clearInterval(timer));
+  socket.on('disconnect', () => {
+    socket.removeAllListeners('connection');
+    clearInterval(timer);
+  });
 }
 
 const app = express();
