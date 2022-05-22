@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { TableBody } from '@mui/material';
-import ControlledSwitch from '../controlled-checkbox.component';
+import ControlledSwitch from '../controlled-switch.component';
 
 import { StyledTableCell, StyledTableRow } from './custom-table.styles';
 

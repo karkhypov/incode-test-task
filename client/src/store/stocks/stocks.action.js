@@ -3,21 +3,8 @@ import { createAction } from '../../utils/reducer/reducer.utils';
 
 import socket from '../../connection/socket';
 
-import { store } from '../store';
-
 const stocksAndInterval = (data, interval) => {
   return { data, interval: interval / 1000 };
-};
-
-const checkIfGrowing = (stocks) => {
-  const prevStocksData = store.getState().stocks.data;
-
-  stocks.forEach((stock, index) => {
-    const prevPrice = +prevStocksData[index].price;
-    const curPrice = +stock.price;
-
-    curPrice > prevPrice ? (stock.is_growing = true) : (stock.is_growing = false);
-  });
 };
 
 const fetchStocksStart = () => (dispatch) => {
@@ -55,7 +42,6 @@ export const fetchStocks = () => (dispatch) => {
 export const fetchStocksUpdate = () => (dispatch) => {
   try {
     socket.on('ticker', (data, interval) => {
-      checkIfGrowing(data);
       dispatch(fetchStocksUpdateSuccess(stocksAndInterval(data, interval)));
     });
   } catch (error) {

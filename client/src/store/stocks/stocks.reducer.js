@@ -5,8 +5,35 @@ const INITIAL_STATE = {
   isLoading: 'initial',
   isPaused: false,
   interval: null,
-  tickersToFilter: [],
   error: null,
+};
+
+const filterData = (state, newState) => {
+  return state.data.map((prevStateStock) => {
+    const stock = newState.data.findIndex(
+      (newStateStock) => newStateStock.ticker === prevStateStock.ticker
+    );
+
+    if (stock === -1) {
+      return prevStateStock;
+    }
+
+    return newState.data[stock];
+  });
+};
+
+const checkIfGrowing = (state, data) => {
+  const checked = [...data];
+  const prevState = state.data;
+
+  checked.forEach((stock, index) => {
+    const prevPrice = +prevState[index].price;
+    const curPrice = +stock.price;
+
+    curPrice > prevPrice ? (stock.is_growing = true) : (stock.is_growing = false);
+  });
+
+  return checked;
 };
 
 export const stocksReducer = (state = INITIAL_STATE, action = {}) => {
@@ -26,20 +53,12 @@ export const stocksReducer = (state = INITIAL_STATE, action = {}) => {
       };
 
     case STOCKS_ACTION_TYPES.FETCH_STOCKS_UPDATE_SUCCESS: {
-      const newData = state.data.map((e) => {
-        const x = payload.data.findIndex((k) => k.ticker === e.ticker);
-
-        if (x === -1) {
-          e.checked = false;
-          return e;
-        }
-
-        return payload.data[x];
-      });
+      const newData = filterData(state, payload);
+      const checkedData = checkIfGrowing(state, newData);
 
       return {
         ...state,
-        data: newData,
+        data: checkedData,
         interval: payload.interval,
       };
     }
