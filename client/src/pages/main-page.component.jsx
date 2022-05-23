@@ -20,7 +20,7 @@ const MainPage = () => {
         direction='column'
         alignItems='center'
         justifyContent='center'
-        sx={{ minHeight: '100vh' }}
+        sx={{ minHeight: '95vh' }}
       >
         {isLoading || isLoading === 'initial' ? (
           <CircularProgress />

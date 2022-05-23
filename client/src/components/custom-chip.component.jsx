@@ -15,27 +15,33 @@ const arrowStyles = {
 };
 
 const textStyles = { fontSize: 18, width: 66, marginLeft: 'auto' };
+const up = { color: 'green', ...textStyles };
+const down = { color: 'red', ...textStyles };
 
 const CustomChip = ({ type, value }) => {
   switch (type) {
     case CUSTOM_CHIP_TYPE_CLASSES.changeUp:
-      return <Typography sx={{ color: 'green', ...textStyles }}>&#43;{value}</Typography>;
+      return <Typography sx={up}>&#43;{value}</Typography>;
 
     case CUSTOM_CHIP_TYPE_CLASSES.changeDown:
-      return <Typography sx={{ color: 'red', ...textStyles }}>&#8722;{value}</Typography>;
+      return <Typography sx={down}>&#8722;{value}</Typography>;
 
     case CUSTOM_CHIP_TYPE_CLASSES.changePercentUp:
       return (
-        <Typography sx={{ color: 'green', ...textStyles }}>
-          <span style={arrowStyles}>&#8593;</span>
+        <Typography sx={up}>
+          <Typography variant='paragraph' sx={arrowStyles}>
+            &#8593;
+          </Typography>
           {value}&#37;
         </Typography>
       );
 
     case CUSTOM_CHIP_TYPE_CLASSES.changePercentDown:
       return (
-        <Typography sx={{ color: 'red', ...textStyles }}>
-          <span style={arrowStyles}>&#8595;</span>
+        <Typography sx={down}>
+          <Typography variant='paragraph' sx={arrowStyles}>
+            &#8595;
+          </Typography>
           {value}&#37;
         </Typography>
       );
