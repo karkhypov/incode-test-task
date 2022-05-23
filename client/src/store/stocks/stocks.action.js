@@ -3,68 +3,52 @@ import { createAction } from '../../utils/reducer/reducer.utils';
 
 import socket from '../../connection/socket';
 
-const stocksAndInterval = (data, interval) => {
-  return { data, interval: interval / 1000 };
+const stocksAndInterval = (stocksArray, interval) => {
+  return { stocksArray, interval: interval / 1000 };
 };
 
-const fetchStocksStart = () => (dispatch) => {
-  try {
-    socket.emit('start');
-    return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_START);
-  } catch (error) {
-    socket.disconnect();
-    dispatch(fetchStocksFailure(error));
-  }
-};
-
-const fetchStocksSuccess = (data) =>
-  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_SUCCESS, data);
-
-const fetchStocksUpdateSuccess = (stocksArray) =>
-  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_UPDATE_SUCCESS, stocksArray);
-
-const fetchStocksFailure = (error) =>
+export const fetchStocksFailure = (error) =>
   createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_FAILED, error);
 
-export const fetchStocks = () => (dispatch) => {
-  try {
-    socket.emit('reset');
-    socket.once('initial', (data, interval) => {
-      dispatch(fetchStocksSuccess(stocksAndInterval(data, interval)));
-    });
-    dispatch(fetchStocksStart());
-  } catch (error) {
-    socket.disconnect();
-    dispatch(fetchStocksFailure(error));
-  }
+export const fetchStocksStart = () => {
+  socket.emit('start');
+  return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_START);
 };
 
+export const fetchStocksSuccess = (stocksArray) =>
+  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_SUCCESS, stocksArray);
+
+export const fetchStocks = () => (dispatch) => {
+  socket.once('initial', (stocksArray, interval) => {
+    dispatch(fetchStocksSuccess(stocksAndInterval(stocksArray, interval)));
+  });
+  dispatch(fetchStocksStart());
+};
+
+export const fetchStocksUpdateSuccess = (stocksArray) =>
+  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_UPDATE_SUCCESS, stocksArray);
+
 export const fetchStocksUpdate = () => (dispatch) => {
-  try {
-    socket.on('ticker', (data, interval) => {
-      dispatch(fetchStocksUpdateSuccess(stocksAndInterval(data, interval)));
-    });
-  } catch (error) {
-    socket.disconnect();
-    dispatch(fetchStocksFailure(error));
-  }
+  socket.on('ticker', (stocksArray, interval) => {
+    dispatch(fetchStocksUpdateSuccess(stocksAndInterval(stocksArray, interval)));
+  });
 };
 
 export const fetchStocksPause = () => {
-  socket.disconnect();
+  socket.emit('pause');
   return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_PAUSE);
 };
 
 export const fetchStocksResume = () => {
-  socket.connect();
-  socket.emit('start');
+  socket.emit('resume');
   return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_RESUME);
 };
 
 export const setTickersInterval = (inputValue) => {
   const interval =
     (inputValue < 1 ? 1 : inputValue > 60 ? 60 : Math.round(inputValue)) * 1000;
-  socket.emit('start', interval);
+
+  socket.emit('set interval', interval);
   return createAction(STOCKS_ACTION_TYPES.SET_TICKERS_INTERVAL, interval / 1000);
 };
 

@@ -1,7 +1,7 @@
 import { STOCKS_ACTION_TYPES } from './stocks.types';
 
 const INITIAL_STATE = {
-  data: [],
+  stocksArray: [],
   isLoading: 'initial',
   isPaused: false,
   interval: null,
@@ -9,8 +9,8 @@ const INITIAL_STATE = {
 };
 
 const filterData = (state, newState) => {
-  return state.data.map((prevStateStock) => {
-    const stock = newState.data.findIndex(
+  return state.stocksArray.map((prevStateStock) => {
+    const stock = newState.stocksArray.findIndex(
       (newStateStock) => newStateStock.ticker === prevStateStock.ticker
     );
 
@@ -18,13 +18,13 @@ const filterData = (state, newState) => {
       return prevStateStock;
     }
 
-    return newState.data[stock];
+    return newState.stocksArray[stock];
   });
 };
 
-const checkIfGrowing = (state, data) => {
-  const checked = [...data];
-  const prevState = state.data;
+const checkIfGrowing = (state, stocksArray) => {
+  const checked = [...stocksArray];
+  const prevState = state.stocksArray;
 
   checked.forEach((stock, index) => {
     const prevPrice = +prevState[index].price;
@@ -46,9 +46,8 @@ export const stocksReducer = (state = INITIAL_STATE, action = {}) => {
     case STOCKS_ACTION_TYPES.FETCH_STOCKS_SUCCESS:
       return {
         ...state,
-        data: payload.data,
+        stocksArray: payload.stocksArray,
         interval: payload.interval,
-
         isLoading: false,
       };
 
@@ -58,7 +57,7 @@ export const stocksReducer = (state = INITIAL_STATE, action = {}) => {
 
       return {
         ...state,
-        data: checkedData,
+        stocksArray: checkedData,
         interval: payload.interval,
       };
     }

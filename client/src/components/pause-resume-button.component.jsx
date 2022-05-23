@@ -5,6 +5,11 @@ import { Button } from '@mui/material';
 import { selectStocksIsPaused } from '../store/stocks/stocks.selector';
 import { fetchStocksPause, fetchStocksResume } from '../store/stocks/stocks.action';
 
+const buttonStyles = {
+  height: '45px',
+  width: '95px',
+};
+
 const PauseResumeButton = () => {
   const dispatch = useDispatch();
 
@@ -16,11 +21,6 @@ const PauseResumeButton = () => {
 
   const handleResume = () => {
     dispatch(fetchStocksResume());
-  };
-
-  const buttonStyles = {
-    height: '45px',
-    width: '95px',
   };
 
   return isPaused ? (

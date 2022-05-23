@@ -4,7 +4,7 @@ const selectStocksReducer = (state) => state.stocks;
 
 export const selectStocksData = createSelector(
   [selectStocksReducer],
-  (stocksSlice) => stocksSlice.data
+  (stocksSlice) => stocksSlice.stocksArray
 );
 
 export const selectStocksIsLoading = createSelector(

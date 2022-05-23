@@ -20,8 +20,10 @@ const CustomChip = ({ type, value }) => {
   switch (type) {
     case CUSTOM_CHIP_TYPE_CLASSES.changeUp:
       return <Typography sx={{ color: 'green', ...textStyles }}>&#43;{value}</Typography>;
+
     case CUSTOM_CHIP_TYPE_CLASSES.changeDown:
       return <Typography sx={{ color: 'red', ...textStyles }}>&#8722;{value}</Typography>;
+
     case CUSTOM_CHIP_TYPE_CLASSES.changePercentUp:
       return (
         <Typography sx={{ color: 'green', ...textStyles }}>
@@ -29,6 +31,7 @@ const CustomChip = ({ type, value }) => {
           {value}&#37;
         </Typography>
       );
+
     case CUSTOM_CHIP_TYPE_CLASSES.changePercentDown:
       return (
         <Typography sx={{ color: 'red', ...textStyles }}>
@@ -36,8 +39,10 @@ const CustomChip = ({ type, value }) => {
           {value}&#37;
         </Typography>
       );
+
     case CUSTOM_CHIP_TYPE_CLASSES.initial:
       return <Typography sx={{ minWidth: '100%', ...textStyles }}>{value}</Typography>;
+
     default:
       return;
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { TableBody } from '@mui/material';
+
 import ControlledSwitch from '../controlled-switch.component';
 import CustomChip, { CUSTOM_CHIP_TYPE_CLASSES } from '../custom-chip.component';
 
