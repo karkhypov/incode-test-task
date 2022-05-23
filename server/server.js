@@ -33,8 +33,6 @@ function utcDate() {
   );
 }
 
-let filteredTickers = [];
-
 function getInitialQuotes(socket, interval = FETCH_INTERVAL) {
   const initialQuotes = tickers.map((ticker) => ({
     ticker,
@@ -50,19 +48,19 @@ function getInitialQuotes(socket, interval = FETCH_INTERVAL) {
   socket.emit('initial', initialQuotes, interval);
 }
 
+let filteredTickers = [...tickers];
+
 function getQuotes(socket, interval = FETCH_INTERVAL) {
-  const quotes = tickers
-    .filter((e) => filteredTickers.indexOf(e) === -1)
-    .map((ticker) => ({
-      ticker,
-      exchange: 'NASDAQ',
-      price: randomValue(100, 300, 2),
-      change: randomValue(0, 200, 2),
-      change_percent: randomValue(0, 1, 2),
-      dividend: randomValue(0, 1, 2),
-      yield: randomValue(0, 2, 2),
-      last_trade_time: utcDate(),
-    }));
+  const quotes = filteredTickers.map((ticker) => ({
+    ticker,
+    exchange: 'NASDAQ',
+    price: randomValue(100, 300, 2),
+    change: randomValue(0, 200, 2),
+    change_percent: randomValue(0, 1, 2),
+    dividend: randomValue(0, 1, 2),
+    yield: randomValue(0, 2, 2),
+    last_trade_time: utcDate(),
+  }));
 
   socket.emit('ticker', quotes, interval);
 }
@@ -70,7 +68,6 @@ function getQuotes(socket, interval = FETCH_INTERVAL) {
 let timer;
 
 function trackTickers(socket, interval = FETCH_INTERVAL) {
-  // every N seconds
   timer = setInterval(() => {
     getQuotes(socket, interval);
   }, interval);
@@ -91,41 +88,51 @@ app.get('/', function (req, res) {
 });
 
 let interval;
+let paused = false;
 
 socketServer.on('connection', (socket) => {
   getInitialQuotes(socket);
 
-  socket.on('start', (response) => {
+  socket.on('start', () => {
+    clearInterval(timer);
+    trackTickers(socket);
+  });
+
+  socket.on('pause', () => {
+    paused = true;
+    clearInterval(timer);
+  });
+
+  socket.on('resume', () => {
+    paused = false;
+    trackTickers(socket, interval);
+  });
+
+  socket.on('set interval', (response) => {
+    interval = response;
     clearInterval(timer);
 
-    if (response) {
-      interval = response;
+    if (!paused) {
+      trackTickers(socket, interval);
     }
-
-    trackTickers(socket, interval);
   });
 
   socket.on('watch-unwatch', (response) => {
     const { ticker, bool } = response;
 
     if (bool) {
-      filteredTickers.push(ticker);
-      socket.emit('start', interval);
+      filteredTickers = filteredTickers.filter((e) => e !== ticker);
       return;
     }
 
-    filteredTickers = filteredTickers.filter((e) => e !== ticker);
-    socket.emit('start', interval);
-  });
-
-  socket.on('reset', () => {
-    interval = FETCH_INTERVAL;
-    filteredTickers = [];
+    filteredTickers.push(ticker);
   });
 
   socket.on('disconnect', () => {
-    socket.removeAllListeners('connection');
     clearInterval(timer);
+    interval = FETCH_INTERVAL;
+    filteredTickers = [...tickers];
+    socket.removeAllListeners('connection');
   });
 });
 
