@@ -87,10 +87,10 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-let interval;
-let paused = false;
-
 socketServer.on('connection', (socket) => {
+  let interval;
+  let paused = false;
+
   getInitialQuotes(socket);
 
   socket.on('start', () => {
