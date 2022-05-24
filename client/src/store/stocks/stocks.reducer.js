@@ -30,7 +30,8 @@ const checkIfGrowing = (state, stocksArray) => {
     const prevPrice = +prevState[index].price;
     const curPrice = +stock.price;
 
-    curPrice > prevPrice ? (stock.is_growing = true) : (stock.is_growing = false);
+    curPrice > prevPrice && (stock.is_growing = true);
+    curPrice < prevPrice && (stock.is_growing = false);
   });
 
   return checked;
