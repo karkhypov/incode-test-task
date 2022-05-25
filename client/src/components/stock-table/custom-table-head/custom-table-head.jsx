@@ -1,6 +1,6 @@
 import { TableHead } from '@mui/material';
 
-import { StyledTableCell, StyledTableRow } from './custom-table.styles';
+import { StyledTableCell, StyledTableRow } from '../custom-table.styles';
 
 const CustomTableHead = () => {
   return (

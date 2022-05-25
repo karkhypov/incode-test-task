@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { Typography } from '@mui/material';
 
-import { selectTickersInterval } from '../store/stocks/stocks.selector';
+import { selectTickersInterval } from '../../store/stocks/stocks.selector';
 
 const IntervalTooltip = () => {
   const interval = useSelector(selectTickersInterval);

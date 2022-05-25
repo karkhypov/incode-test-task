@@ -15,24 +15,24 @@ const arrowStyles = {
 };
 
 const textStyles = { fontSize: 18, width: 66, marginLeft: 'auto' };
-const up = { color: 'green', ...textStyles };
-const down = { color: 'red', ...textStyles };
+const up = { ...textStyles, color: 'green' };
+const down = { ...textStyles, color: 'red' };
 
 const CustomChip = ({ type, value }) => {
   switch (type) {
     case CUSTOM_CHIP_TYPE_CLASSES.changeUp:
-      return <Typography sx={up}>&#43;{value}</Typography>;
+      return <Typography sx={up}>+{value}</Typography>;
 
     case CUSTOM_CHIP_TYPE_CLASSES.changeDown:
-      return <Typography sx={down}>&#8722;{value}</Typography>;
+      return <Typography sx={down}>-{value}</Typography>;
 
     case CUSTOM_CHIP_TYPE_CLASSES.changePercentUp:
       return (
         <Typography sx={up}>
           <Typography variant='paragraph' sx={arrowStyles}>
-            &#8593;
+            ↑
           </Typography>
-          {value}&#37;
+          {value}%
         </Typography>
       );
 
@@ -40,14 +40,14 @@ const CustomChip = ({ type, value }) => {
       return (
         <Typography sx={down}>
           <Typography variant='paragraph' sx={arrowStyles}>
-            &#8595;
+            ↓
           </Typography>
-          {value}&#37;
+          {value}%
         </Typography>
       );
 
     case CUSTOM_CHIP_TYPE_CLASSES.initial:
-      return <Typography sx={{ minWidth: '100%', ...textStyles }}>{value}</Typography>;
+      return <Typography sx={{ ...textStyles, minWidth: '100%' }}>{value}</Typography>;
 
     default:
       return;

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { Box, Button, TextField } from '@mui/material';
 
-import IntervalTooltip from './interval-tooltip.component';
+import IntervalTooltip from './interval-tooltip/interval-tooltip.component';
 
 import { setTickersInterval } from '../store/stocks/stocks.action';
 

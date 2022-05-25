@@ -1,9 +1,9 @@
 import { Table, TableContainer, Paper } from '@mui/material';
 
 import CustomTableBody from './custom-table-body.component';
-import CustomTableHead from './custom-table-head';
+import CustomTableHead from './custom-table-head/custom-table-head';
 
-const CustomTable = () => {
+const StockTable = () => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label='data table'>
@@ -14,4 +14,4 @@ const CustomTable = () => {
   );
 };
 
-export default CustomTable;
+export default StockTable;

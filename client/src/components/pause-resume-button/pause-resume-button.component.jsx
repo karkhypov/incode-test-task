@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Button } from '@mui/material';
 
-import { selectStocksIsPaused } from '../store/stocks/stocks.selector';
-import { fetchStocksPause, fetchStocksResume } from '../store/stocks/stocks.action';
+import { selectStocksIsPaused } from '../../store/stocks/stocks.selector';
+import { fetchStocksPause, fetchStocksResume } from '../../store/stocks/stocks.action';
 
 const buttonStyles = {
   height: '45px',

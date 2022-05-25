@@ -5,7 +5,7 @@ import { Grid } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 
 import Controls from '../components/controls.component';
-import CustomTable from '../components/stock-table/custom-table.component';
+import StockTable from '../components/stock-table/stock-table.component';
 
 import { selectStocksIsLoading } from '../store/stocks/stocks.selector';
 
@@ -26,7 +26,7 @@ const MainPage = () => {
           <CircularProgress />
         ) : (
           <>
-            <CustomTable />
+            <StockTable />
             <Controls />
           </>
         )}

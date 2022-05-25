@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 
 import { TableBody } from '@mui/material';
 
-import ControlledSwitch from '../controlled-switch.component';
-import CustomChip, { CUSTOM_CHIP_TYPE_CLASSES } from '../custom-chip.component';
+import ControlledSwitch from '../controlled-switch/controlled-switch.component';
+import CustomChip, {
+  CUSTOM_CHIP_TYPE_CLASSES,
+} from '../custom-chip/custom-chip.component';
 
 import { StyledTableCell, StyledTableRow } from './custom-table.styles';
 

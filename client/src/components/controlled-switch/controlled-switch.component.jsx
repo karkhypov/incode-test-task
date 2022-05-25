@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { watchUnwatchTicker } from '../store/stocks/stocks.action';
+import { watchUnwatchTicker } from '../../store/stocks/stocks.action';
 
 import { Switch } from '@mui/material';
 
