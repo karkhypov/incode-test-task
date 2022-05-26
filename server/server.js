@@ -33,6 +33,7 @@ function utcDate() {
   );
 }
 
+// template function for the possibility of further improvement of functionality
 function getInitialQuotes(socket, interval = FETCH_INTERVAL) {
   const initialQuotes = tickers.map((ticker) => ({
     ticker,
