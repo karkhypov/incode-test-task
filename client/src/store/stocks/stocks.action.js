@@ -7,9 +7,6 @@ const stocksAndInterval = (stocksArray, interval) => {
   return { stocksArray, interval: interval / 1000 };
 };
 
-export const fetchStocksFailure = (error) =>
-  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_FAILED, error);
-
 export const fetchStocksStart = () => {
   socket.emit('start');
   return createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_START);
@@ -56,3 +53,6 @@ export const watchUnwatchTicker = (ticker) => {
   socket.emit('watch-unwatch', ticker);
   return createAction(STOCKS_ACTION_TYPES.WATCH_UNWATCH_TICKER);
 };
+
+export const fetchStocksFailure = (error) =>
+  createAction(STOCKS_ACTION_TYPES.FETCH_STOCKS_FAILED, error);
