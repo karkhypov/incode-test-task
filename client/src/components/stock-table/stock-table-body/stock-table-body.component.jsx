@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 
 import { TableBody } from '@mui/material';
 
-import ControlledSwitch from '../controlled-switch/controlled-switch.component';
+import ControlledSwitch from '../../controlled-switch/controlled-switch.component';
 import CustomChip, {
   CUSTOM_CHIP_TYPE_CLASSES,
-} from '../custom-chip/custom-chip.component';
+} from '../../custom-chip/custom-chip.component';
 
-import { StyledTableCell, StyledTableRow } from './custom-table.styles';
+import { StyledTableCell, StyledTableRow } from '../stock-table.styles';
 
-import { selectStocksData } from '../../store/stocks/stocks.selector';
+import { selectStocksData } from '../../../store/stocks/stocks.selector';
 
 const createData = (
   ticker,
@@ -34,7 +34,7 @@ const createData = (
   };
 };
 
-const CustomTableBody = () => {
+const StockTableBody = () => {
   const stocksData = useSelector(selectStocksData);
   const rows = stocksData.map((element) => createData(...Object.values(element)));
 
@@ -93,4 +93,4 @@ const CustomTableBody = () => {
   );
 };
 
-export default CustomTableBody;
+export default StockTableBody;

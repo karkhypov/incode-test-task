@@ -6,7 +6,7 @@ import { renderWithRedux } from '../../utils/test/test.utils';
 import ControlledSwitch from './controlled-switch.component';
 
 describe('Controlled Switch', () => {
-  it('initially renders the switch correctly', () => {
+  it('initially renders the switch', () => {
     renderWithRedux(<ControlledSwitch />);
 
     const controlledSwitch = screen.getByRole('checkbox');
@@ -15,7 +15,7 @@ describe('Controlled Switch', () => {
     expect(controlledSwitch.checked).toEqual(true);
   });
 
-  it('correctly changes the state after clicking on it', () => {
+  it('changes the state after clicking on it', () => {
     renderWithRedux(<ControlledSwitch />);
 
     const controlledSwitch = screen.getByRole('checkbox');
@@ -26,7 +26,7 @@ describe('Controlled Switch', () => {
     expect(controlledSwitch.checked).toEqual(false);
   });
 
-  it('correctly changes the state after twice clicking on it', () => {
+  it('changes the state after twice clicking on it', () => {
     renderWithRedux(<ControlledSwitch />);
 
     const controlledSwitch = screen.getByRole('checkbox');

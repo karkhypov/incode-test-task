@@ -1,11 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import { within } from '@testing-library/dom';
 
-import CustomTableHead from './custom-table-head';
+import StockTableHead from './stock-table-head.component';
 
-describe('Custom Table Head', () => {
-  it('renders table header, row and all columns correctly', () => {
-    render(<CustomTableHead />);
+describe('Stock Table Head', () => {
+  it('renders table header, row and all columns', () => {
+    render(
+      <table>
+        <StockTableHead />
+      </table>
+    );
 
     const tableHeader = screen.getByRole('rowgroup');
     expect(tableHeader).toBeInTheDocument();
@@ -13,12 +17,15 @@ describe('Custom Table Head', () => {
     const tableRow = within(tableHeader).getByRole('row');
     expect(tableRow).toBeInTheDocument();
 
-    const tableColumns = within(tableRow).getAllByRole('columnheader');
-    expect(tableColumns.length).toBe(9);
+    expect(within(tableRow).getAllByRole('columnheader').length).toBe(9);
   });
 
-  it('renders all columns headers correctly', () => {
-    render(<CustomTableHead />);
+  it('renders all columns headers', () => {
+    render(
+      <table>
+        <StockTableHead />
+      </table>
+    );
 
     expect(screen.getByText(/ticker/i)).toBeInTheDocument();
     expect(screen.getByText(/price/i)).toBeInTheDocument();

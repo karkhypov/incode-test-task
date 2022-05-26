@@ -10,7 +10,7 @@ const pauseButtonStyles = () => 'backgroundColor: rgb(211, 47, 47)';
 const resumeButtonStyles = () => 'backgroundColor: rgb(25, 118, 210)';
 
 describe('Pause-Resume Button', () => {
-  it('initially renders the button correctly', () => {
+  it('initially renders the button', () => {
     renderWithRedux(<PauseResumeButton />);
 
     const button = screen.getByRole('button');
@@ -19,7 +19,7 @@ describe('Pause-Resume Button', () => {
     expect(within(button).getByText(/pause/i)).toBeInTheDocument();
   });
 
-  it('correctly changes the button after clicking on it', () => {
+  it('changes the button after clicking on it', () => {
     renderWithRedux(<PauseResumeButton />);
 
     const button = screen.getByRole('button');
@@ -29,7 +29,7 @@ describe('Pause-Resume Button', () => {
     expect(within(button).getByText(/resume/i)).toBeInTheDocument();
   });
 
-  it('correctly changes the button after twice clicking on it', () => {
+  it('changes the button after twice clicking on it', () => {
     renderWithRedux(<PauseResumeButton />);
 
     const button = screen.getByRole('button');

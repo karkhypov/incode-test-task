@@ -1,8 +1,8 @@
 import { TableHead } from '@mui/material';
 
-import { StyledTableCell, StyledTableRow } from '../custom-table.styles';
+import { StyledTableCell, StyledTableRow } from '../stock-table.styles';
 
-const CustomTableHead = () => {
+const StockTableHead = () => {
   return (
     <TableHead sx={{ margin: '100px' }}>
       <StyledTableRow>
@@ -20,4 +20,4 @@ const CustomTableHead = () => {
   );
 };
 
-export default CustomTableHead;
+export default StockTableHead;

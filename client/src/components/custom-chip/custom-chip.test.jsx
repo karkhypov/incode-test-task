@@ -19,13 +19,13 @@ const mockCustomChipProps = {
 };
 
 describe('Custom Chip', () => {
-  it('initially renders the component correctly', () => {
+  it('initially renders the custom chip', () => {
     render(<CustomChip {...mockCustomChipProps.initial} />);
 
     expect(screen.getByText(/n\/a/i)).toBeInTheDocument();
   });
 
-  it('correctly renders the increased price change', () => {
+  it('renders the increased price change', () => {
     render(<CustomChip {...mockCustomChipProps.changeUp} />);
 
     const increasedPrice = screen.getByText(/\+123/i);
@@ -34,7 +34,7 @@ describe('Custom Chip', () => {
     expect(increasedPrice).toHaveStyle('color: green');
   });
 
-  it('correctly renders the decreased price change', () => {
+  it('renders the decreased price change', () => {
     render(<CustomChip {...mockCustomChipProps.changeDown} />);
 
     const decreasedPrice = screen.getByText(/-123/i);
@@ -43,7 +43,7 @@ describe('Custom Chip', () => {
     expect(decreasedPrice).toHaveStyle('color: red');
   });
 
-  it('correctly renders the increased price percentage change', () => {
+  it('renders the increased price percentage change', () => {
     render(<CustomChip {...mockCustomChipProps.changePercentUp} />);
 
     const increasedPricePercentage = screen.getByText(/123%/i);
@@ -54,7 +54,7 @@ describe('Custom Chip', () => {
     expect(within(increasedPricePercentage).getByText('↑')).toBeInTheDocument();
   });
 
-  it('correctly renders the decreased price percentage change', () => {
+  it('renders the decreased price percentage change', () => {
     render(<CustomChip {...mockCustomChipProps.changePercentDown} />);
 
     const decreasedPricePercentage = screen.getByText(/123%/i);
