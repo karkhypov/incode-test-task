@@ -1,11 +1,11 @@
 import { STOCKS_ACTION_TYPES } from './stocks.types';
 import { createAction } from '../../utils/reducer/reducer.utils';
+import {
+  stocksAndInterval,
+  checkInterval,
+} from '../../utils/reducer/stocks.reducer.utils';
 
 import socket from '../../connection/socket';
-
-const stocksAndInterval = (stocksArray, interval) => {
-  return { stocksArray, interval: interval / 1000 };
-};
 
 export const fetchStocksStart = () => {
   socket.emit('start');
@@ -42,8 +42,7 @@ export const fetchStocksResume = () => {
 };
 
 export const setTickersInterval = (inputValue) => {
-  const interval =
-    (inputValue < 1 ? 1 : inputValue > 60 ? 60 : Math.round(inputValue)) * 1000;
+  const interval = checkInterval(inputValue);
 
   socket.emit('set interval', interval);
   return createAction(STOCKS_ACTION_TYPES.SET_TICKERS_INTERVAL, interval / 1000);
